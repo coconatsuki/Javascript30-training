@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+
+      const searchInput = () => document.querySelector(".search");
+      const suggestionField = () => document.querySelector(".suggestions");
+      const referencesPromise = fetch(endpoint).then(result => result.json());
+
+      const highlightText = text => {
+        const inputValue = searchInput().value.toLowerCase();
+
+        if (text.toLowerCase().includes(inputValue)) {
+          const startIndex = text.toLowerCase().indexOf(inputValue);
+          const hightlightedSpan = `<span class="hl">${text.substring(
+            startIndex,
+            startIndex + inputValue.length
+          )}</span>`;
+
+          const entireString = `${text.substring(
+            0,
+            startIndex
+          )}${hightlightedSpan}${text.substring(
+            startIndex + inputValue.length,
+            text.length
+          )}`;
+          return entireString;
+        }
+        return text;
+      };
+
+      const createNewLi = object => {
+        const li = document.createElement("li");
+        const span1 = document.createElement("span");
+        span1.innerHTML = `${highlightText(object.city)},  ${highlightText(
+          object.state
+        )}`;
+        const span2 = document.createElement("span");
+        span2.classList.add("population");
+        span2.innerText = object.population;
+        li.appendChild(span1);
+        li.appendChild(span2);
+        return li;
+      };
+
+      const updateUl = results => {
+        const newUl = document.createElement("ul");
+        newUl.classList.add("suggestions");
+        results.forEach(res => {
+          newUl.appendChild(createNewLi(res));
+        });
+        suggestionField().replaceWith(newUl);
+      };
+
+      const filteredResults = async value => {
+        const references = await referencesPromise;
+        return references.filter(
+          ref =>
+            ref.city.toLowerCase().includes(value) ||
+            ref.state.toLowerCase().includes(value)
+        );
+      };
+
+      const listenInputEntries = async e => {
+        const inputValue = e.target.value.toLowerCase();
+        updateUl(await filteredResults(inputValue));
+      };
+
+      searchInput().addEventListener("keyup", listenInputEntries);
+    </script>
+  </body>
+</html>
