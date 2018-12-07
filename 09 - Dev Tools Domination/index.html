@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Console Tricks!</title>
+  </head>
+  <body>
+    <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+    <script>
+      const dogs = [{ name: "Snickers", age: 2 }, { name: "hugo", age: 8 }];
+
+      function makeGreen() {
+        const p = document.querySelector("p");
+        p.style.color = "#BADA55";
+        p.style.fontSize = "50px";
+      }
+
+      // Regular
+      console.log("Hello");
+
+      // Interpolated
+      console.log("Hello I'm a %s string!", "weird");
+
+      // Styled
+      console.log("%c I'm some styled text!", "color: red; font-size: 20px");
+
+      // warning!
+      console.warn("Oh nooooooooees!");
+
+      // Error :|
+      console.error("ERROOOOOR ahahahaha");
+
+      // Info
+      console.info("Crocodiles eat 2, 3 people per year");
+
+      // Testing
+      console.assert(1 === 1, "That's wrong!"); // print nothing because it's true
+      console.assert(1 === 2, "That's wrong!");
+      const p = document.querySelector("p");
+      console.assert(
+        p.classList.contains("ouch"),
+        "p does'nt contain class ouch"
+      );
+
+      // clearing
+      // console.clear() To get your collegue frustrated, when writen at the end of the code.
+
+      // Viewing DOM Elements
+      console.log(p);
+      console.dir(p); // print all the methods and properties that live in the element
+
+      // Grouping together
+      dogs.forEach(dog => {
+        console.groupCollapsed(`${dog.name}`); // or .group() to develop what's inside
+        console.log(`This is ${dog.name}`);
+        console.log(`${dog.name} is ${dog.age} years old`);
+        console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+        console.groupEnd(`${dog.name}`);
+      });
+
+      // counting => Tell how many time we have iterated over something
+      console.count("Wes");
+      console.count("Wes");
+      console.count("Steve");
+      console.count("Steve");
+      console.count("Wes");
+
+      // timing
+      console.time("fetching data");
+      fetch("https://api.github.com/users/wesbos")
+        .then(data => data.json())
+        .then(data => {
+          console.timeEnd("fetching data");
+          console.log(data);
+        });
+
+      // print a table from an Array of objects
+      console.table(dogs);
+    </script>
+  </body>
+</html>
