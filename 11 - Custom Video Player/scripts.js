@@ -18,11 +18,20 @@ const twentyFiveSecondsButton = document.querySelector(
 const togglePlayPause = () => {
   if (playerButton().classList.contains("toggle")) {
     playerButton().classList.remove("toggle");
+    playerButton().textContent = "| |";
     video().play();
   } else {
     playerButton().classList.add("toggle");
+    playerButton().textContent = "►";
     video().pause();
   }
+};
+
+const updateProgressBar = e => {
+  progressBar().style.setProperty(
+    "flex-basis",
+    `${(e.target.currentTime * 100) / e.target.duration}%`
+  );
 };
 
 const changeVolume = e => {
@@ -39,13 +48,6 @@ const tenSecondsBack = e => {
 
 const twentyFiveSecondsForward = e => {
   video().currentTime += 25;
-};
-
-const updateProgressBar = e => {
-  progressBar().style.setProperty(
-    "flex-basis",
-    `${(e.target.currentTime * 100) / e.target.duration}%`
-  );
 };
 
 // Hook up the event listeners
