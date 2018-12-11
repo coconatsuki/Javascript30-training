@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+  </head>
+  <body>
+    <style>
+      body {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 500px;
+      }
+      .konami {
+        color: red;
+        font-size: 3em;
+      }
+    </style>
+    <h1 class="title">KONAMI KODE - try typing some keys</h1>
+    <h2 class="konami"></h2>
+    <script>
+      const title = document.querySelector(".title");
+      const header = document.querySelector(".konami");
+      let keysArray = [];
+      let code =
+        "ARROWUPARROWUPARROWDOWNARROWDOWNARROWLEFTARROWRIGHTARROWLEFTARROWRIGHTBA";
+
+      const checkCode = () => {
+        if (
+          keysArray
+            .join("")
+            .toUpperCase()
+            .includes(code)
+        ) {
+          console.log(`%c KONAMIIIIIII!!!`, "color: red; font-size: 20px");
+          title.style.setProperty("display", "none");
+          header.textContent = "KONAMIIIIIII!!!";
+          keysArray = [];
+        }
+      };
+
+      const detectKey = e => {
+        if (keysArray.length === 0) {
+          title.style.setProperty("display", "block");
+          header.textContent = "";
+        }
+        keysArray.push(e.key);
+        checkCode();
+        console.log(keysArray);
+      };
+
+      window.addEventListener("keyup", detectKey);
+    </script>
+  </body>
+</html>
