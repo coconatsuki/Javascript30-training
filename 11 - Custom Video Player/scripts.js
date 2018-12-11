@@ -1,6 +1,8 @@
 // Get our elements
+const videoPlayer = document.querySelector(".player");
 const video = () => document.querySelector(".player__video.viewer");
 const progressBar = () => document.querySelector(".progress__filled");
+const progressBarBackground = () => document.querySelector(".progress");
 const playerButton = () =>
   document.querySelector(".player__button[title='Toggle Play']");
 const volumeSlider = () =>
@@ -18,7 +20,7 @@ const twentyFiveSecondsButton = document.querySelector(
 const togglePlayPause = () => {
   if (playerButton().classList.contains("toggle")) {
     playerButton().classList.remove("toggle");
-    playerButton().textContent = "| |";
+    playerButton().textContent = "❚ ❚";
     video().play();
   } else {
     playerButton().classList.add("toggle");
@@ -42,12 +44,17 @@ const changePlayback = e => {
   video().playbackRate = e.target.value;
 };
 
-const tenSecondsBack = e => {
-  video().currentTime -= 25;
+const changeCurrentTime = e => {
+  video().currentTime = video().currentTime + e;
 };
 
-const twentyFiveSecondsForward = e => {
-  video().currentTime += 25;
+updateVideoPosition = e => {
+  video().currentTime =
+    (e.offsetX * video().duration) / videoPlayer.clientWidth;
+  progressBar().style.setProperty(
+    "flex-basis",
+    `${(e.offsetX * 100) / videoPlayer.clientWidth}%`
+  );
 };
 
 // Hook up the event listeners
@@ -57,5 +64,6 @@ video().addEventListener("click", togglePlayPause);
 video().addEventListener("timeupdate", updateProgressBar);
 volumeSlider().addEventListener("input", changeVolume);
 playBackSlider().addEventListener("input", changePlayback);
-tenSecondsButton.addEventListener("click", tenSecondsBack);
-twentyFiveSecondsButton.addEventListener("click", twentyFiveSecondsForward);
+tenSecondsButton.addEventListener("click", () => changeCurrentTime(-10));
+twentyFiveSecondsButton.addEventListener("click", () => changeCurrentTime(+25));
+progressBarBackground().addEventListener("click", updateVideoPosition);
