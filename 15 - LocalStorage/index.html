@@ -96,6 +96,12 @@
         plates().replaceWith(newUl);
       };
 
+      const displayNewItem = () => {
+        const newItemIndex = items.length - 1;
+        const newItem = createNewItem(items[newItemIndex], newItemIndex);
+        plates().appendChild(newItem);
+      };
+
       const updateOrderStatus = e => {
         if (e.target.type === "checkbox") {
           const itemIndex = e.target.dataset.index;
@@ -109,12 +115,6 @@
         loadItems().forEach(item => items.push(item));
         displayItems();
         plates().addEventListener("click", updateOrderStatus);
-      };
-
-      const displayNewItem = () => {
-        const newItemIndex = items.length - 1;
-        const newItem = createNewItem(items[newItemIndex], newItemIndex);
-        plates().appendChild(newItem);
       };
 
       const emptyAddItemInput = () => {

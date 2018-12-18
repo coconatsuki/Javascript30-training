@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mouse Shadow</title>
+  </head>
+  <body>
+    <div class="hero">
+      <h1 class="header1" contenteditable>🔥WOAH!</h1>
+      <h1 class="header2" contenteditable>🔥WOAH!</h1>
+      <h1 class="header3" contenteditable>🔥WOAH!</h1>
+      <h1 class="header4" contenteditable>🔥WOAH!</h1>
+    </div>
+
+    <style>
+      html {
+        color: black;
+        font-family: sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: black;
+      }
+
+      h1 {
+        font-size: 100px;
+        position: absolute;
+      }
+    </style>
+
+    <script>
+      const mainHeader = document.querySelector(".hero h1:first-child");
+      const allHeaders = document.querySelectorAll(".hero h1");
+
+      const heroPosition = () => {
+        const centerX = mainHeader.offsetLeft + mainHeader.offsetWidth / 2;
+        const centerY = mainHeader.offsetTop + mainHeader.offsetHeight / 2;
+        return { centerX, centerY };
+      };
+
+      mouseHeroDistance = (mouseX, mouseY) => {
+        const { centerX, centerY } = heroPosition();
+        const vertical = (centerY - mouseY) / 2;
+        const horizontal = (centerX - mouseX) / 2;
+        return { vertical, horizontal };
+      };
+
+      textShadowValue = (headerNumber, distances) => {
+        switch (headerNumber) {
+          case 1:
+            return `rgb(197, 177, 216) ${distances.horizontal}px ${
+              distances.vertical
+            }px 0px`;
+          case 2:
+            return `rgb(138, 191, 177) ${-distances.horizontal}px ${-distances.vertical}px 0px`;
+          case 3:
+            return `rgb(243, 106, 106) ${distances.vertical}px ${
+              distances.horizontal
+            }px 0px`;
+          case 4:
+            return `rgba(239, 236, 147, 0.84) ${-distances.vertical}px ${-distances.horizontal}px 0px`;
+          default:
+            console.log("ERROR", headerNumber);
+        }
+      };
+
+      const updateTextShadow = distances => {
+        allHeaders.forEach((h, i) => {
+          h.style.setProperty("text-shadow", textShadowValue(i + 1, distances));
+        });
+      };
+
+      const shadowFollowMouse = e => {
+        const { clientX: mouseX, clientY: mouseY } = e;
+        const distances = mouseHeroDistance(mouseX, mouseY);
+        updateTextShadow(distances);
+      };
+
+      const updateText = e => {
+        const newText = e.currentTarget.textContent;
+        allHeaders.forEach(h => {
+          h.textContent = newText;
+        });
+      };
+
+      document.addEventListener("mousemove", shadowFollowMouse);
+      allHeaders.forEach(h => {
+        h.addEventListener("keyup", updateText);
+      });
+    </script>
+  </body>
+</html>
