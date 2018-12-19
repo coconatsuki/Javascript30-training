@@ -78,7 +78,6 @@
       const secondsPerVideo = li => {
         const timeArray = li.dataset.time.split(":").map(str => parseInt(str));
         timeArray[0] = timeArray[0] * 60;
-        console.log("SECONDS PER LI: ", timeArray[0] + timeArray[1]);
         return timeArray[0] + timeArray[1];
       };
 
@@ -94,7 +93,13 @@
         };
       };
 
-      const addTotalSeconds = () => {
+      const printResult = totalTime => {
+        resultHeader.textContent = `RESULT => all videos have a total of ${
+          totalTime.hours
+        }h ${totalTime.minutes}min ${totalTime.seconds}sec`;
+      };
+
+      const sumVideosTime = () => {
         const totalSeconds = Array.from(videos).reduce(
           (total, currentElement) => {
             return total + secondsPerVideo(currentElement);
@@ -102,16 +107,10 @@
           0
         );
         const totalTime = convertTotalTime(totalSeconds);
-        resultHeader.textContent = `RESULT => all videos have a total of ${
-          totalTime.hours
-        }h ${totalTime.minutes}min ${totalTime.seconds}sec`;
-        console.log(
-          "all videos have a total of => ",
-          `${totalTime.hours}h ${totalTime.minutes}min ${totalTime.seconds}sec`
-        );
+        printResult(totalTime);
       };
 
-      addTotalSeconds();
+      sumVideosTime();
     </script>
   </body>
 </html>
